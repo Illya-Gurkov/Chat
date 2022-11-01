@@ -237,7 +237,7 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mgV-on-Mfe">
                                                         <rect key="frame" x="0.0" y="0.0" width="330" height="45"/>
                                                         <subviews>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JEJ-sg-bC0">
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" restorationIdentifier="email" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="JEJ-sg-bC0">
                                                                 <rect key="frame" x="10" y="3" width="310" height="39"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                 <textInputTraits key="textInputTraits"/>
@@ -261,10 +261,10 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qmr-an-1Kr">
                                                         <rect key="frame" x="0.0" y="66" width="330" height="45"/>
                                                         <subviews>
-                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Пароль" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UgN-D9-HSI">
+                                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" restorationIdentifier="password" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Пароль" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UgN-D9-HSI">
                                                                 <rect key="frame" x="10" y="3" width="310" height="39"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                <textInputTraits key="textInputTraits"/>
+                                                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                             </textField>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -288,6 +288,9 @@
                                                 <rect key="frame" x="0.0" y="181.33333333333331" width="330" height="34.333333333333343"/>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Забыли пароль?"/>
+                                                <connections>
+                                                    <action selector="forgetPassword:" destination="fR5-A8-vTE" eventType="touchUpInside" id="6wh-sv-FVM"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xa1-Et-HPa">
                                                 <rect key="frame" x="0.0" y="240.66666666666671" width="330" height="34.333333333333343"/>
@@ -308,6 +311,9 @@
                                                         <integer key="value" value="25"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="authBtn:" destination="fR5-A8-vTE" eventType="touchUpInside" id="Ul9-sI-Oho"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -348,6 +354,13 @@
                             <constraint firstAttribute="bottom" secondItem="OeW-fe-Dq0" secondAttribute="bottom" id="z7J-dg-q43"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="emailTF" destination="JEJ-sg-bC0" id="BPT-BF-lN0"/>
+                        <outlet property="emailView" destination="mgV-on-Mfe" id="F6S-sr-xCo"/>
+                        <outlet property="mainView" destination="OeW-fe-Dq0" id="hKk-xC-Wd2"/>
+                        <outlet property="passwordTF" destination="UgN-D9-HSI" id="Qgc-zP-DbH"/>
+                        <outlet property="passwordView" destination="qmr-an-1Kr" id="LO5-bE-ibA"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0GX-zN-AMi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -15,8 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
-        //userDefault.setValue(false, forKey: "isLogin")
+       
         let isLogin = userDefault.object(forKey: "isLogin") as? Bool ?? false
         
         if isLogin{

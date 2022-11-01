@@ -61,8 +61,14 @@ class RegViewController: UIViewController {
                     case 0:
                         print("произошла ошибка регистрации")
                     case 1:
-                        print("успешно зарегестрировались")
                         self?.service.confrimEmail()
+                        let alert = UIAlertController(title: "OK", message: "Success", preferredStyle: .alert)
+                        let okBtn = UIAlertAction(title: "Auth", style: .default) {
+                            _ in
+                            self?.delegate.closeVC()
+                        }
+                        alert.addAction(okBtn)
+                        self?.present(alert, animated: true)
                     default:
                         print("Неизвестная ошибка")
                     }
