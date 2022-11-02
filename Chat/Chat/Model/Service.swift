@@ -65,6 +65,55 @@ class Service {
     func getUserStatus(){
         
     }
+    func getAllUsers(completion: @escaping([String]) ->()){
+        Firestore.firestore().collection("users").getDocuments { snap, err in
+            if err == nil {
+                var emailList = [String]()
+                if let docs = snap?.documents{
+                    for doc in docs {
+                        let data = doc.data()
+                        let email = data["email"] as! String
+                        emailList.append(email)
+                    }
+                }
+                completion(emailList)
+            }
+        }
+    }
     
+    
+    //MARK: -- Messanger
+    func sendMEssage(otherId: String?, convoId: String?, message: Message, text: String, completion: @escaping (Bool) ->()){
+        if convoId == nil {
+            // cоздаем нов переписку
+        }else {
+            let msg: [String: Any] = [
+                "data" : Date(),
+                "seder": message.sender.senderId,
+                "text": text
+            ]
+            Firestore.firestore().collection("conversations").document(convoId!).collection("messages").addDocument(data: msg) { err in
+                if err == nil {
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+                
+            }
+        }
+        
+    }
+    func updateConvo(){
+        
+    }
+    func getConvoId(){
+        
+    }
+    func getAllMessage(){
+        
+    }
+    func getOneMessage(){
+        
+    }
 }
 
