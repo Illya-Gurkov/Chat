@@ -9,7 +9,7 @@ import UIKit
 
 class UsersViewController: UIViewController {
 
-    var users = [String]()
+    var users = [CurentUser]()
     let servicec = Service.shared
     
     
@@ -46,7 +46,7 @@ extension UsersViewController: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCellTableViewCell.reuseId, for: indexPath) as! UserCellTableViewCell
         cell.selectionStyle = .none
         let cellName = users[indexPath.row]
-        cell.configCell(cellName)
+        cell.configCell(cellName.email)
         return cell
     }
     
@@ -54,7 +54,14 @@ extension UsersViewController: UITableViewDelegate, UITableViewDataSource{
         return 100
     }
     
-   
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let userId = users[indexPath.row].id
+        let vc = ChatViewController()
+        vc.otherId = userId
+        
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
     
 }
