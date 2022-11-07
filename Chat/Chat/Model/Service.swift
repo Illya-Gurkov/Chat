@@ -91,7 +91,7 @@ class Service {
     
     
     //MARK: -- Messanger
-    func sendMEssage(otherId: String?, convoId: String?, text: String, completion: @escaping (Bool) ->()){
+    func sendMEssage(otherId: String?, convoId: String?, text: String, completion: @escaping (String) ->()){
         let ref =  Firestore.firestore()
         if let uid = Auth.auth().currentUser?.uid{
             if convoId == nil {
@@ -124,7 +124,7 @@ class Service {
                 
                 let msg: [String: Any] = [
                     "date": Date(),
-                    "seder": uid,
+                    "sender": uid,
                     "text": text
                 ]
                 
@@ -146,9 +146,7 @@ class Service {
                             .collection("messages")
                             .addDocument(data: msg){ err in
                                 if err == nil {
-                                    completion(true)
-                                } else {
-                                    completion(false)
+                                    completion(convoId)
                                 }
                                 
                             }
@@ -158,16 +156,14 @@ class Service {
             }else {
                 let msg: [String: Any] = [
                     "data" : Date(),
-                    "seder": uid,
+                    "sender": uid,
                     "text": text
                 ]
                 
                 Firestore.firestore().collection("conversations").document(convoId!).collection("messages").addDocument(data: msg) { err in
                     if err == nil {
-                        completion(true)
-                    } else {
-                        completion(false)
-                    }
+                        completion(convoId!)
+                    } 
                     
                 }
             }
@@ -199,7 +195,45 @@ class Service {
         }
         
     }
-    func getAllMessage(){
+    func getAllMessage(chatId: String, complection: @escaping ([Message]) -> ()){
+        if let uid = Auth.auth().currentUser?.uid{
+            let ref = Firestore.firestore()
+            ref.collection("conversations")
+                .document(chatId)
+                .collection("messages")
+                .limit(to: 50)
+                .order(by: "date", descending: false)
+                .addSnapshotListener { snap, err in
+                    if err != nil {
+                        return
+                    }
+                    if let snap = snap, !snap.documents.isEmpty{
+                        var msgs = [Message]()
+                        var sender = Sender(senderId: uid, displayName: "Me")
+                        for doc in snap.documents {
+                            let data = doc.data()
+                            let userId = data["sender"] as! String
+                            
+                            let messageId = doc.documentID
+                            
+                            let date = data["date"] as! Timestamp
+                            let sentDate = date.dateValue()
+                            let text = data["text"] as! String
+                        
+                            if userId == uid {
+                                sender = Sender(senderId: "1", displayName: "")
+                            } else {
+                                sender = Sender(senderId: "2", displayName: "")
+                            }
+                            
+                           
+                            
+                            msgs.append(Message(sender: sender, messageId: messageId, sentDate: sentDate, kind: .text(text)))
+                        }
+                        complection(msgs)
+                    }
+                }
+        }
         
     }
     func getOneMessage(){

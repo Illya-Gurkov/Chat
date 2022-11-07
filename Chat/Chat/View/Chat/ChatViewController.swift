@@ -31,8 +31,8 @@ class ChatViewController: MessagesViewController {
     var otherId: String?
     
     let service = Service.shared
-    let selfSender = Sender(senderId: "1", displayName: "Me")
-    let otherSender = Sender(senderId: "2", displayName: "Dima")
+    let selfSender = Sender(senderId: "1", displayName: "")
+    let otherSender = Sender(senderId: "2", displayName: "")
     
  var messages = [Message]()
     
@@ -48,13 +48,25 @@ class ChatViewController: MessagesViewController {
         showMessageTimestampOnSwipeLeft = true
         
         
+        
         if chatID == nil {
             service.getConvoId(otherId: otherId!) { [weak self] chatId in
                 self?.chatID = chatId
+                self?.getMessages(convoId: chatId)
             }
             
         }
+        
     }
+    
+    func getMessages(convoId: String){
+        service.getAllMessage(chatId: convoId) {[weak self] messages in
+            self?.messages = messages
+            self?.messagesCollectionView.reloadDataAndKeepOffset()
+        }
+    }
+    
+    
 }
 extension ChatViewController: MessagesDisplayDelegate, MessagesLayoutDelegate, MessagesDataSource{
     var currentSender: MessageKit.SenderType {
@@ -76,12 +88,12 @@ extension ChatViewController: InputBarAccessoryViewDelegate{
         
         
         messages.append(msg)
-        service.sendMEssage(otherId: self.otherId, convoId: self.chatID, text: text) {[weak self] isSend in
+        service.sendMEssage(otherId: self.otherId, convoId: self.chatID, text: text) {[weak self] convoId in
             DispatchQueue.main.async {
                 inputBar.inputTextView.text = nil
                 self?.messagesCollectionView.reloadDataAndKeepOffset()
             }
-          
+            self?.chatID = convoId
         }
     }
 }
