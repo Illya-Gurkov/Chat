@@ -49,7 +49,7 @@ class Service {
             if err != nil {
                 complection(.error)
             } else{
-                if let result = result{
+                if result != nil{
                     complection(.success)
 //                    if result.user.isEmailVerified {
 //                        complection(.success)
@@ -79,9 +79,9 @@ class Service {
                     for doc in docs {
                         let data = doc.data()
                         let userId = doc.documentID
-                        let email = data["email"] as! String
+                        let emal = data["email"] as! String
                         
-                        curentUsers.append(CurentUser(id: userId, email: email))
+                        curentUsers.append(CurentUser(id: userId, email: emal))
                     }
                 }
                 completion(curentUsers)
@@ -115,7 +115,7 @@ class Service {
                     .setData(selfData)
                 
                 
-                  // переписка с нами
+                // переписка с нами
                 ref.collection("users")
                     .document(otherId!)
                     .collection("conversations")
@@ -153,14 +153,14 @@ class Service {
                     }
                 
                 
-            }else {
+            } else {
                 let msg: [String: Any] = [
                     "data" : Date(),
                     "sender": uid,
                     "text": text
                 ]
                 
-                Firestore.firestore().collection("conversations").document(convoId!).collection("messages").addDocument(data: msg) { err in
+               ref.collection("conversations").document(convoId!).collection("messages").addDocument(data: msg) { err in
                     if err == nil {
                         completion(convoId!)
                     } 
@@ -182,7 +182,7 @@ class Service {
                 .collection("conversations")
                 .whereField("otherId", isEqualTo: otherId)
                 .getDocuments { snap, err in
-                    if let err = err{
+                    if err != nil{
                         return
                     }
                     if let snap = snap, !snap.documents.isEmpty{
@@ -203,12 +203,15 @@ class Service {
                 .collection("messages")
                 .limit(to: 50)
                 .order(by: "date", descending: false)
+               
                 .addSnapshotListener { snap, err in
                     if err != nil {
-                        return
-                    }
+                    return
+                }
+          
                     if let snap = snap, !snap.documents.isEmpty{
                         var msgs = [Message]()
+                        
                         var sender = Sender(senderId: uid, displayName: "Me")
                         for doc in snap.documents {
                             let data = doc.data()
@@ -233,7 +236,7 @@ class Service {
                         complection(msgs)
                     }
                 }
-        }
+    }
         
     }
     func getOneMessage(){

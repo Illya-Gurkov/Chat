@@ -49,13 +49,13 @@ class ChatViewController: MessagesViewController {
         
         
         
-        if chatID == nil {
+       if chatID == nil {
             service.getConvoId(otherId: otherId!) { [weak self] chatId in
                 self?.chatID = chatId
                 self?.getMessages(convoId: chatId)
             }
             
-        }
+      }
         
     }
     
@@ -84,11 +84,13 @@ extension ChatViewController: MessagesDisplayDelegate, MessagesLayoutDelegate, M
 }
 extension ChatViewController: InputBarAccessoryViewDelegate{
     func inputBar(_ inputBar: InputBarAccessoryView, didPressSendButtonWith text: String) {
+        
         let msg = Message(sender: selfSender, messageId: "", sentDate: Date(), kind: .text(text))
         
         
         messages.append(msg)
         service.sendMEssage(otherId: self.otherId, convoId: self.chatID, text: text) {[weak self] convoId in
+            
             DispatchQueue.main.async {
                 inputBar.inputTextView.text = nil
                 self?.messagesCollectionView.reloadDataAndKeepOffset()
